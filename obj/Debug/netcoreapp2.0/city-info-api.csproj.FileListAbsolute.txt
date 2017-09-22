@@ -1,0 +1,11 @@
+C:\myGitHub\dotnet-core-api\src\obj\Debug\netcoreapp2.0\city-info-api.csproj.CoreCompileInputs.cache
+C:\myGitHub\dotnet-core-api\src\obj\Debug\netcoreapp2.0\city-info-api.AssemblyInfoInputs.cache
+C:\myGitHub\dotnet-core-api\src\obj\Debug\netcoreapp2.0\city-info-api.AssemblyInfo.cs
+C:\myGitHub\dotnet-core-api\src\bin\Debug\netcoreapp2.0\city-info-api.deps.json
+C:\myGitHub\dotnet-core-api\src\bin\Debug\netcoreapp2.0\city-info-api.runtimeconfig.json
+C:\myGitHub\dotnet-core-api\src\bin\Debug\netcoreapp2.0\city-info-api.runtimeconfig.dev.json
+C:\myGitHub\dotnet-core-api\src\bin\Debug\netcoreapp2.0\city-info-api.dll
+C:\myGitHub\dotnet-core-api\src\bin\Debug\netcoreapp2.0\city-info-api.pdb
+C:\myGitHub\dotnet-core-api\src\obj\Debug\netcoreapp2.0\city-info-api.dll
+C:\myGitHub\dotnet-core-api\src\obj\Debug\netcoreapp2.0\city-info-api.pdb
+C:\myGitHub\dotnet-core-api\src\obj\Debug\netcoreapp2.0\city-info-api.csprojResolveAssemblyReference.cache
