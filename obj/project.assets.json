@@ -12538,6 +12538,9 @@
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
       "projectUniqueName": "C:\\myGitHub\\dotnet-core-api\\src\\city-info-api.csproj",
       "projectName": "city-info-api",
@@ -12557,8 +12560,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\stash\\local-nuget": {},
-        "C:\\stash\\managedlenderdata\\src\\ManagedLenderData.NuGet": {},
         "http://artifactory.cdk.com/artifactory/api/nuget/nuget-virtual": {},
         "https://www.nuget.org/api/v2/": {}
       },

@@ -8,3 +8,4 @@ C:\myGitHub\dotnet-core-api\src\bin\Debug\netcoreapp2.0\city-info-api.dll
 C:\myGitHub\dotnet-core-api\src\bin\Debug\netcoreapp2.0\city-info-api.pdb
 C:\myGitHub\dotnet-core-api\src\obj\Debug\netcoreapp2.0\city-info-api.dll
 C:\myGitHub\dotnet-core-api\src\obj\Debug\netcoreapp2.0\city-info-api.pdb
+C:\myGitHub\dotnet-core-api\src\obj\Debug\netcoreapp2.0\city-info-api.csprojResolveAssemblyReference.cache
