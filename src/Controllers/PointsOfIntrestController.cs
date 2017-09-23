@@ -1,43 +1,72 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using city_info_api.Models;
+using city_info_api.Services;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.Extensions.Logging;
 
 namespace city_info_api.Controllers
 {
     [Route("api/cities")]
-
-      public class PointsOfIntrestController : Controller
+    public class PointsOfIntrestController : Controller
     {
+        private ILogger<PointsOfIntrestController> _logger;
+        private IMailService _localMailService;
+
+        public PointsOfIntrestController(ILogger<PointsOfIntrestController> logger, IMailService localMailService)
+        {
+            _logger = logger;
+            _localMailService = localMailService;
+        }
+
+
         [HttpGet("{cityId}/pointsOfIntrest")]
         public IActionResult GetPointsOfIntrests(int cityId)
         {
-            var result=CitiesDataStore.Current.Cities.FirstOrDefault(i=>i.Id == cityId);
-            if(result==null){
-                return NotFound();
+            try
+            {
+                //throw new Exception("simple ex");
+                var result = CitiesDataStore.Current.Cities.FirstOrDefault(i => i.Id == cityId);
+                if (result == null)
+                {
+                    _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of intrest.");
+
+                    return NotFound();
+                }
+                return Ok(result.PointsOfIntrest);
             }
-            return Ok(result.PointsOfIntrest);
+            catch (Exception e)
+            {
+                _logger.LogInformation($"Exception while getting points of intrest for city with id {cityId} .",e);
+
+                return StatusCode(500, "A unknown error occured while processing yor request.");
+            }
+
+           
         }
 
-         [HttpGet("{cityId}/pointsOfIntrest/{id}",Name = "GetPointsOfIntrest"),]
-        public IActionResult GetPointsOfIntrest(int cityId,int id)
-        {   
-            var city=CitiesDataStore.Current.Cities.FirstOrDefault(c=>c.Id == cityId);
-            if(city==null){
+        [HttpGet("{cityId}/pointsOfIntrest/{id}", Name = "GetPointsOfIntrest"),]
+        public IActionResult GetPointsOfIntrest(int cityId, int id)
+        {
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+            if (city == null)
+            {
                 return NotFound();
             }
 
-            var pointsOfIntrest= city.PointsOfIntrest.FirstOrDefault(c=>c.Id == id);
+            var pointsOfIntrest = city.PointsOfIntrest.FirstOrDefault(c => c.Id == id);
 
-            if(pointsOfIntrest ==null){
+            if (pointsOfIntrest == null)
+            {
                 return NotFound();
             }
-            return Ok(pointsOfIntrest);           
+            return Ok(pointsOfIntrest);
         }
 
-         [HttpPost("{cityId}/pointsOfIntrest")]
-        public IActionResult CreatePointOfIntrest(int cityId,[FromBody] PointOfIntrestCreationDto pointsOfIntrest)
+        [HttpPost("{cityId}/pointsOfIntrest")]
+        public IActionResult CreatePointOfIntrest(int cityId, [FromBody] PointOfIntrestCreationDto pointsOfIntrest)
         {
             if (pointsOfIntrest == null)
             {
@@ -53,10 +82,11 @@ namespace city_info_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            
-            var city=CitiesDataStore.Current.Cities.FirstOrDefault(i=>i.Id == cityId);
 
-            if(city==null){
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(i => i.Id == cityId);
+
+            if (city == null)
+            {
                 return NotFound();
             }
 
@@ -71,7 +101,7 @@ namespace city_info_api.Controllers
 
             city.PointsOfIntrest.Add(finalPoinOfIntrest);
 
-            return CreatedAtRoute("GetPointsOfIntrest",new {cityId=city.Id,id=finalPoinOfIntrest.Id},finalPoinOfIntrest);
+            return CreatedAtRoute("GetPointsOfIntrest", new { cityId = city.Id, id = finalPoinOfIntrest.Id }, finalPoinOfIntrest);
 
 
         }
@@ -148,7 +178,7 @@ namespace city_info_api.Controllers
                 Description = pointOfIntrestFromStore.Description
             };
 
-            patchDocument.ApplyTo(pointOfIntrestToPatch,ModelState);
+            patchDocument.ApplyTo(pointOfIntrestToPatch, ModelState);
 
             if (!ModelState.IsValid)
             {
@@ -195,10 +225,12 @@ namespace city_info_api.Controllers
 
             city.PointsOfIntrest.Remove(pointOfIntrestFromStore);
 
+            _localMailService.Send("Point of Intrest deleted",$"Point of Intrest {pointOfIntrestFromStore.Name} with id {pointOfIntrestFromStore.Id} was deleted");
+
             return NoContent();
         }
 
-        
+
 
     }
 }
