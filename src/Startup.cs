@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using city_info_api.Data;
 using city_info_api.Entities;
+using city_info_api.Models;
 using city_info_api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,7 +49,8 @@ namespace city_info_api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().AddMvcOptions(o=>o.OutputFormatters.Add( new XmlDataContractSerializerOutputFormatter()));
+            services.AddMvc();
+                //.AddMvcOptions(o=>o.OutputFormatters.Add( new XmlDataContractSerializerOutputFormatter()));
             // .AddJsonOptions(o=>{
             //     if(o.SerializerSettings.ContractResolver!=null){
             //         var castedResolver= o.SerializerSettings.ContractResolver as DefaultContractResolver;
@@ -63,6 +66,8 @@ namespace city_info_api
             var connectionString = Startup.Configuration["connectionStrings:cityInfoDBConnectionString"];
 
             services.AddDbContext<CityInfoContext>(a=>a.UseSqlServer(connectionString));
+
+            services.AddScoped<ICityInfoRepository, CityInfoRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,6 +86,19 @@ namespace city_info_api
 
             //seed data
             cityInfoContext.EnsureSeedDataForContext();
+
+
+            //auto mapper
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Entities.City, Models.CityWithooutPointOfIntrestDto>();
+                cfg.CreateMap<Entities.City, CityDto>();
+                cfg.CreateMap<Entities.PointOfIntrest, PointOfIntrestDto>();
+                cfg.CreateMap<PointOfIntrestCreationDto, PointOfIntrest>();
+                cfg.CreateMap<PointOfIntrestUpdationDto, PointOfIntrest>();
+                cfg.CreateMap<PointOfIntrest,PointOfIntrestUpdationDto>();
+            });
+
 
             app.UseStatusCodePages();
             app.UseMvc();
