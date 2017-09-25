@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using city_info_api.Entities;
 using city_info_api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Formatters.Xml;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
@@ -58,10 +60,13 @@ namespace city_info_api
 #else
              services.AddTransient<IMailService,CloudMailService>();
 #endif
+            var connectionString = Startup.Configuration["connectionStrings:cityInfoDBConnectionString"];
+
+            services.AddDbContext<CityInfoContext>(a=>a.UseSqlServer(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,ILoggerFactory loggerFactory,CityInfoContext cityInfoContext)
         {
             loggerFactory.AddConsole();
 
@@ -73,6 +78,9 @@ namespace city_info_api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            //seed data
+            cityInfoContext.EnsureSeedDataForContext();
 
             app.UseStatusCodePages();
             app.UseMvc();
