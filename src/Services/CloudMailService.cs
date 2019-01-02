@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace city_info_api.Services
 {
-    public class CloudMailService
+    public class CloudMailService : IMailService
     {
         private string _mailTo = Startup.Configuration["mailSettings:mailToAddress"];
         private string _mailFrom = Startup.Configuration["mailSettings:mailFromAddress"];
