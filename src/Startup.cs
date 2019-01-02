@@ -59,7 +59,7 @@ namespace city_info_api
             // });
 #if DEBUG
 
-            services.AddTransient<IMailService,LocalMailService>();
+            //services.AddTransient<IMailService,LocalMailService>();
 #else
              services.AddTransient<IMailService,CloudMailService>();
 #endif
